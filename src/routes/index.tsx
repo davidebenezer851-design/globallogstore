@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Store, Upload, Wallet } from "lucide-react";
+import { Plus, Store, Upload } from "lucide-react";
 import { AppShell, useShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { LogCard } from "@/components/LogCard";
@@ -39,49 +39,55 @@ function Dashboard() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-3xl border border-border bg-surface p-6 shadow-float md:p-8">
-        <p className="text-xs uppercase tracking-[0.2em] text-primary">Dashboard</p>
-        <h1 className="mt-2 font-display text-3xl font-bold md:text-4xl">
+      <section className="overflow-hidden rounded-3xl wallet-gradient p-6 text-primary-foreground shadow-glow md:p-8">
+        <h1 className="font-display text-2xl font-bold md:text-3xl">
           Welcome back{profile?.display_name ? `, ${profile.display_name}` : ""}
         </h1>
-        <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-          Upload logs, route them into the right marketplace category and keep your wallet topped
-          up.
+        <p className="mt-6 text-xs uppercase tracking-[0.2em] opacity-80">Available balance</p>
+        <p className="mt-1 font-display text-4xl font-bold md:text-5xl">
+          $
+          {balance.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </p>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <StatCard
-            icon={<Wallet className="size-5" />}
-            label="Wallet balance"
-            value={`$${balance.toFixed(2)}`}
-          />
-          <StatCard
-            icon={<Upload className="size-5" />}
-            label="Your logs"
-            value={String(myLogs?.length ?? 0)}
-          />
-          <StatCard
-            icon={<Store className="size-5" />}
-            label="Marketplace logs"
-            value={String(allLogs?.length ?? 0)}
-          />
-        </div>
-
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button className="rounded-full" onClick={openUpload}>
-            Upload a log
-          </Button>
           <Button variant="secondary" className="rounded-full" onClick={openFund}>
-            Fund wallet
+            <Plus className="size-4" /> Fund wallet
           </Button>
-          <Button asChild variant="ghost" className="rounded-full">
-            <Link to="/marketplace">Browse marketplace</Link>
-          </Button>
+          {user && (
+            <Button
+              variant="ghost"
+              className="rounded-full bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/25 hover:text-primary-foreground"
+              onClick={openUpload}
+            >
+              <Upload className="size-4" /> Upload a log
+            </Button>
+          )}
         </div>
       </section>
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <StatCard
+          icon={<Upload className="size-5" />}
+          label="Your listings"
+          value={String(myLogs?.length ?? 0)}
+        />
+        <StatCard
+          icon={<Store className="size-5" />}
+          label="Marketplace logs"
+          value={String(allLogs?.length ?? 0)}
+        />
+      </div>
+
       <section className="space-y-4">
-        <h2 className="font-display text-xl font-bold">Your listings</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="font-display text-xl font-bold">Your listings</h2>
+          <Button asChild variant="ghost" size="sm" className="rounded-full">
+            <Link to="/marketplace">Browse marketplace</Link>
+          </Button>
+        </div>
         {!user ? (
           <EmptyState
             text="Sign in to upload logs and track your listings."
@@ -124,7 +130,7 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-border bg-surface-2 p-4">
+    <div className="flex items-center gap-3 rounded-3xl glass p-4">
       <span className="grid size-10 place-items-center rounded-xl wallet-gradient text-primary-foreground">
         {icon}
       </span>
@@ -138,7 +144,7 @@ function StatCard({
 
 function EmptyState({ text, action }: { text: string; action?: React.ReactNode }) {
   return (
-    <div className="flex flex-col items-center gap-4 rounded-3xl border border-dashed border-border bg-surface/60 p-10 text-center">
+    <div className="flex flex-col items-center gap-4 rounded-3xl glass p-10 text-center">
       <p className="text-sm text-muted-foreground">{text}</p>
       {action}
     </div>
