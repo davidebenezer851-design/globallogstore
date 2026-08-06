@@ -41,7 +41,7 @@ function Marketplace() {
         <h1 className="mt-2 font-display text-3xl font-bold md:text-4xl">Browse logs</h1>
       </header>
 
-      <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
+      <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-2">
         <FilterTab
           label="All"
           active={active === "all"}
@@ -69,7 +69,7 @@ function Marketplace() {
       {isLoading ? (
         <p className="text-sm text-muted-foreground">Loading marketplace…</p>
       ) : filtered.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-border bg-surface/60 p-12 text-center text-sm text-muted-foreground">
+        <div className="rounded-3xl glass p-12 text-center text-sm text-muted-foreground">
           No logs in this category yet.
         </div>
       ) : (
@@ -101,10 +101,10 @@ function FilterTab({
       type="button"
       onClick={onClick}
       className={cn(
-        "flex shrink-0 items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium transition-colors",
+        "flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
         active
-          ? "bg-primary text-primary-foreground"
-          : "bg-surface text-muted-foreground hover:text-foreground",
+          ? "wallet-gradient text-primary-foreground shadow-glow"
+          : "glass text-muted-foreground hover:text-foreground",
       )}
     >
       {icon}

@@ -8,8 +8,8 @@ export function LogCard({ log }: { log: MarketLog }) {
   const seller = log.seller?.display_name ?? "Anonymous seller";
 
   return (
-    <article className="group overflow-hidden rounded-3xl border border-border bg-surface shadow-float transition-transform hover:-translate-y-1">
-      <div className="relative aspect-4/3 overflow-hidden bg-surface-2">
+    <article className="group overflow-hidden rounded-3xl glass transition-all duration-300 hover:-translate-y-1 hover:shadow-glow">
+      <div className="relative aspect-4/3 overflow-hidden rounded-3xl rounded-b-none bg-surface-2">
         {log.imageUrl ? (
           <img
             src={log.imageUrl}
@@ -22,14 +22,14 @@ export function LogCard({ log }: { log: MarketLog }) {
             <ImageOff className="size-8" />
           </div>
         )}
-        <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs font-semibold">
+        <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs font-semibold text-foreground">
           <Icon className="size-4" />
           {category.label}
         </span>
       </div>
 
       <div className="space-y-3 p-4">
-        <p className="line-clamp-2 min-h-10 text-sm text-muted-foreground">
+        <p className="line-clamp-2 min-h-10 rounded-2xl bg-secondary/60 p-3 text-sm text-muted-foreground">
           {log.description || "No description provided."}
         </p>
 
