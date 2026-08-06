@@ -1,94 +1,90 @@
 import { Link } from "@tanstack/react-router";
-import { Plus, Wallet } from "lucide-react";
+import { LogOut, User, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useProfile } from "@/hooks/useMarketplace";
 import { useAuth } from "@/hooks/useAuth";
-import { useShell } from "@/components/AppShell";
 
 const navLinkClass =
   "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground";
 
 export function AppHeader() {
   const { data: profile } = useProfile();
-  const { user, signOut } = useAuth();
-  const { openFund } = useShell();
-  const balance = Number(profile?.wallet_balance ?? 0);
+  const { user, loading, signOut } = useAuth();
+  const name = profile?.display_name ?? user?.email ?? "Member";
 
   return (
     <header className="sticky top-0 z-40 glass">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between">
-        <div className="flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="grid size-9 place-items-center rounded-xl wallet-gradient font-display text-lg font-bold text-primary-foreground">
-              G
-            </span>
-            <span className="font-display text-lg font-bold tracking-tight">GlobalLogStore</span>
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3">
+        <Link to="/" className="flex items-center gap-2">
+          <span className="grid size-9 place-items-center rounded-2xl wallet-gradient font-display text-lg font-bold text-primary-foreground shadow-glow">
+            G
+          </span>
+          <span className="font-display text-lg font-bold tracking-tight">GlobalLogStore</span>
+        </Link>
+
+        <nav className="hidden items-center gap-1 rounded-full bg-secondary/70 p-1 md:flex">
+          <Link
+            to="/"
+            activeOptions={{ exact: true }}
+            activeProps={{ className: "bg-surface text-foreground shadow-float" }}
+            className={navLinkClass}
+          >
+            Dashboard
           </Link>
+          <Link
+            to="/marketplace"
+            activeProps={{ className: "bg-surface text-foreground shadow-float" }}
+            className={navLinkClass}
+          >
+            Marketplace
+          </Link>
+        </nav>
 
-          <nav className="flex items-center gap-1 md:hidden">
-            <Link to="/" activeProps={{ className: "text-foreground" }} className={navLinkClass}>
-              Dashboard
-            </Link>
-            <Link
-              to="/marketplace"
-              activeProps={{ className: "text-foreground" }}
-              className={navLinkClass}
-            >
-              Marketplace
-            </Link>
-          </nav>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <nav className="hidden items-center gap-1 rounded-full bg-secondary/60 p-1 md:flex">
-            <Link
-              to="/"
-              activeOptions={{ exact: true }}
-              activeProps={{ className: "bg-surface-2 text-foreground shadow-float" }}
-              className={navLinkClass}
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/marketplace"
-              activeProps={{ className: "bg-surface-2 text-foreground shadow-float" }}
-              className={navLinkClass}
-            >
-              Marketplace
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-3 rounded-2xl border border-border bg-surface/80 px-4 py-2.5 shadow-float">
-            <div className="grid size-9 place-items-center rounded-xl wallet-gradient text-primary-foreground">
-              <Wallet className="size-4" />
-            </div>
-            <div className="leading-tight">
-              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                Available balance
-              </p>
-              <p className="font-display text-lg font-bold">
-                $
-                {balance.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </p>
-            </div>
-            <Button size="sm" className="rounded-full" onClick={openFund}>
-              <Plus className="size-4" /> Fund Wallet
-            </Button>
-          </div>
-
-          {user ? (
-            <Button variant="ghost" size="sm" className="rounded-full" onClick={() => void signOut()}>
-              Sign out
-            </Button>
-          ) : (
-            <Button asChild variant="secondary" size="sm" className="rounded-full">
-              <Link to="/auth">Sign in</Link>
-            </Button>
-          )}
-        </div>
+        {loading ? (
+          <span className="size-9 animate-pulse rounded-full bg-secondary" />
+        ) : user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label="Account menu"
+                className="grid size-9 place-items-center rounded-full wallet-gradient font-display text-sm font-bold text-primary-foreground shadow-glow"
+              >
+                {name.charAt(0).toUpperCase()}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52 rounded-2xl">
+              <DropdownMenuLabel className="truncate">{name}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/wallet">
+                  <Wallet className="size-4" /> Wallet
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/profile">
+                  <User className="size-4" /> Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => void signOut()}>
+                <LogOut className="size-4" /> Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button asChild size="sm" className="rounded-full">
+            <Link to="/auth">Sign in</Link>
+          </Button>
+        )}
       </div>
     </header>
   );
