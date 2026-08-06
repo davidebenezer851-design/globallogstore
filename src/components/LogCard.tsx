@@ -1,11 +1,13 @@
 import { ImageOff } from "lucide-react";
 import { getCategory } from "@/lib/categories";
 import type { MarketLog } from "@/hooks/useMarketplace";
+import { useCurrency } from "@/hooks/useCurrency";
 
 export function LogCard({ log }: { log: MarketLog }) {
   const category = getCategory(log.category);
   const Icon = category.icon;
-  const seller = log.seller?.display_name ?? "Anonymous seller";
+  const { format } = useCurrency();
+  const seller = log.seller?.display_name?.trim() || log.seller?.email?.split("@")[0] || "Seller";
 
   return (
     <article className="group overflow-hidden rounded-3xl glass transition-all duration-300 hover:-translate-y-1 hover:shadow-glow">
@@ -22,20 +24,21 @@ export function LogCard({ log }: { log: MarketLog }) {
             <ImageOff className="size-8" />
           </div>
         )}
-        <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full glass px-3 py-1.5 text-xs font-semibold text-foreground">
-          <Icon className="size-4" />
-          {category.label}
-        </span>
       </div>
 
       <div className="space-y-3 p-4">
+        <span className="flex w-fit items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold text-foreground">
+          <Icon className="size-4" />
+          {category.label}
+        </span>
+
         <p className="line-clamp-2 min-h-10 rounded-2xl bg-secondary/60 p-3 text-sm text-muted-foreground">
           {log.description || "No description provided."}
         </p>
 
         <div className="flex items-center justify-between">
           <span className="font-display text-lg font-bold text-primary">
-            {log.price > 0 ? `$${log.price.toFixed(2)}` : "Free"}
+            {log.price > 0 ? format(log.price) : "Free"}
           </span>
           <span className="rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
             {log.status}
