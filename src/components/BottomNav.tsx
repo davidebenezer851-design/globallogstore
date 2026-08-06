@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Plus, Store } from "lucide-react";
+import { Grid2x2, Home, Store } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useShell } from "@/components/AppShell";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,7 +10,7 @@ const items = [
 ] as const;
 
 export function BottomNav() {
-  const { openUpload } = useShell();
+  const { openMenu } = useShell();
   const { user } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const left = items.slice(0, 1);
@@ -41,11 +41,11 @@ export function BottomNav() {
         {user && (
           <button
             type="button"
-            onClick={openUpload}
-            aria-label="Upload log"
+            onClick={openMenu}
+            aria-label="Open quick menu"
             className="mx-1 grid size-14 -translate-y-4 place-items-center rounded-full wallet-gradient text-primary-foreground shadow-glow transition-transform hover:scale-105 active:scale-95"
           >
-            <Plus className="size-7" strokeWidth={2.5} />
+            <Grid2x2 className="size-7" strokeWidth={2.5} />
           </button>
         )}
 

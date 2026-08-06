@@ -12,7 +12,7 @@ export type MarketLog = {
   price: number;
   status: string;
   created_at: string;
-  seller: { display_name: string | null; avatar_url: string | null } | null;
+  seller: { display_name: string | null; avatar_url: string | null; email: string | null } | null;
 };
 
 async function signPaths(paths: string[]) {
@@ -40,14 +40,21 @@ export function useLogs(userId?: string) {
 
       const signed = await signPaths(rows.map((r) => r.image_url));
       const sellerIds = [...new Set(rows.map((r) => r.user_id))];
-      const sellers = new Map<string, { display_name: string | null; avatar_url: string | null }>();
+      const sellers = new Map<
+        string,
+        { display_name: string | null; avatar_url: string | null; email: string | null }
+      >();
       if (sellerIds.length) {
         const { data: profiles } = await supabase
           .from("profiles")
-          .select("id,display_name,avatar_url")
+          .select("id,display_name,avatar_url,email")
           .in("id", sellerIds);
         profiles?.forEach((p) =>
-          sellers.set(p.id, { display_name: p.display_name, avatar_url: p.avatar_url }),
+          sellers.set(p.id, {
+            display_name: p.display_name,
+            avatar_url: p.avatar_url,
+            email: p.email,
+          }),
         );
       }
 
