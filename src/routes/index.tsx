@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   AlertTriangle,
   ArrowRight,
   LayoutList,
   Plus,
-  ShoppingCart,
+  Eye,
+  EyeOff,
   Store,
   Upload,
 } from "lucide-react";
@@ -45,6 +47,8 @@ function Dashboard() {
   const { openUpload, openFund } = useShell();
   const { format } = useCurrency();
   const balance = Number(profile?.wallet_balance ?? 0);
+  const [showBalance, setShowBalance] = useState(true);
+  const name = profile?.display_name?.trim() || user?.email?.split("@")[0] || "there";
 
   return (
     <div className="space-y-6">
@@ -56,38 +60,26 @@ function Dashboard() {
         </p>
       </div>
 
-      <div className="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 pb-1">
-        <button
-          type="button"
-          onClick={openFund}
-          className="flex shrink-0 items-center gap-2 rounded-full glass px-5 py-3 text-sm font-semibold"
-        >
-          <Plus className="size-4 text-primary" /> Fund Account
-        </button>
-        <Link
-          to="/marketplace"
-          className="flex shrink-0 items-center gap-2 rounded-full glass px-5 py-3 text-sm font-semibold"
-        >
-          <ShoppingCart className="size-4 text-primary" /> Buy Logs
-        </Link>
-        <Link
-          to="/listings"
-          className="flex shrink-0 items-center gap-2 rounded-full glass px-5 py-3 text-sm font-semibold"
-        >
-          <LayoutList className="size-4 text-primary" /> My Listings
-        </Link>
-      </div>
-
       <section className="overflow-hidden rounded-3xl wallet-gradient p-6 text-primary-foreground shadow-glow md:p-8">
         <h1 className="font-display text-xl font-bold md:text-2xl">
-          Dashboard Overview{profile?.display_name ? `, ${profile.display_name}` : ""} 👋
+          Hi {name} 👋
         </h1>
 
         <div className="mt-5 flex items-center gap-3">
           <p className="text-xs uppercase tracking-[0.2em] opacity-80">Account balance</p>
           <CurrencyToggle />
+          <button
+            type="button"
+            aria-label={showBalance ? "Hide balance" : "Show balance"}
+            onClick={() => setShowBalance((v) => !v)}
+            className="grid size-7 place-items-center rounded-full bg-primary-foreground/20 transition-transform active:scale-90"
+          >
+            {showBalance ? <Eye className="size-4" /> : <EyeOff className="size-4" />}
+          </button>
         </div>
-        <p className="mt-1 font-display text-4xl font-bold md:text-5xl">{format(balance)}</p>
+        <p className="mt-1 font-display text-4xl font-bold md:text-5xl">
+          {showBalance ? format(balance) : "••••••"}
+        </p>
 
         <div className="mt-6 flex flex-wrap gap-3">
           <Button variant="secondary" className="rounded-full" onClick={openFund}>

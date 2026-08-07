@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ListingsRouteImport } from './routes/listings'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as WalletRouteImport } from './routes/wallet'
 
@@ -36,6 +37,11 @@ const MarketplaceRoute = MarketplaceRouteImport.update({
   path: '/marketplace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/listings': typeof ListingsRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
   '/wallet': typeof WalletRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/listings': typeof ListingsRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
   '/wallet': typeof WalletRoute
 }
@@ -69,21 +77,36 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/listings': typeof ListingsRoute
   '/marketplace': typeof MarketplaceRoute
+  '/messages': typeof MessagesRoute
   '/profile': typeof ProfileRoute
   '/wallet': typeof WalletRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/auth' | '/listings' | '/marketplace' | '/profile' | '/wallet'
+    | '/'
+    | '/auth'
+    | '/listings'
+    | '/marketplace'
+    | '/messages'
+    | '/profile'
+    | '/wallet'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/listings' | '/marketplace' | '/profile' | '/wallet'
+  to:
+    | '/'
+    | '/auth'
+    | '/listings'
+    | '/marketplace'
+    | '/messages'
+    | '/profile'
+    | '/wallet'
   id:
     | '__root__'
     | '/'
     | '/auth'
     | '/listings'
     | '/marketplace'
+    | '/messages'
     | '/profile'
     | '/wallet'
   fileRoutesById: FileRoutesById
@@ -93,6 +116,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ListingsRoute: typeof ListingsRoute
   MarketplaceRoute: typeof MarketplaceRoute
+  MessagesRoute: typeof MessagesRoute
   ProfileRoute: typeof ProfileRoute
   WalletRoute: typeof WalletRoute
 }
@@ -127,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -149,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ListingsRoute: ListingsRoute,
   MarketplaceRoute: MarketplaceRoute,
+  MessagesRoute: MessagesRoute,
   ProfileRoute: ProfileRoute,
   WalletRoute: WalletRoute,
 }

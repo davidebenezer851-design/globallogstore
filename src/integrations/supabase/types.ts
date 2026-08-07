@@ -47,6 +47,33 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          read_at: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          recipient_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -54,6 +81,7 @@ export type Database = {
           display_name: string | null
           email: string | null
           id: string
+          location: string | null
           wallet_balance: number
         }
         Insert: {
@@ -62,6 +90,7 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id: string
+          location?: string | null
           wallet_balance?: number
         }
         Update: {
@@ -70,6 +99,7 @@ export type Database = {
           display_name?: string | null
           email?: string | null
           id?: string
+          location?: string | null
           wallet_balance?: number
         }
         Relationships: []

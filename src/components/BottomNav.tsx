@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Grid2x2, Home, Store } from "lucide-react";
+import { Home, Plus, Store } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useShell } from "@/components/AppShell";
 import { useAuth } from "@/hooks/useAuth";
@@ -45,7 +45,7 @@ export function BottomNav() {
             aria-label="Open quick menu"
             className="mx-1 grid size-14 -translate-y-4 place-items-center rounded-full wallet-gradient text-primary-foreground shadow-glow transition-transform hover:scale-105 active:scale-95"
           >
-            <Grid2x2 className="size-7" strokeWidth={2.5} />
+            <Plus className="size-8 transition-transform duration-300" strokeWidth={2.5} />
           </button>
         )}
 
