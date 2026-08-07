@@ -3,7 +3,10 @@ import { AppShell } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
 import { LogCard } from "@/components/LogCard";
 import { useAuth } from "@/hooks/useAuth";
-import { useLogs, useProfile } from "@/hooks/useMarketplace";
+import { useLogs, useProfile, useUpdateProfile } from "@/hooks/useMarketplace";
+import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -31,6 +34,12 @@ function ProfilePage() {
   const { user, signOut } = useAuth();
   const { data: profile } = useProfile();
   const { data: logs } = useLogs(user?.id);
+  const updateProfile = useUpdateProfile();
+  const [location, setLocation] = useState("");
+
+  useEffect(() => {
+    setLocation(profile?.location ?? "");
+  }, [profile?.location]);
 
   if (!user) {
     return (
@@ -66,6 +75,33 @@ function ProfilePage() {
           Sign out
         </Button>
       </div>
+
+      <section className="rounded-3xl glass p-6">
+        <h2 className="font-display text-lg font-bold">Your location</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Buyers see this on your listings so they know where you are selling from.
+        </p>
+        <form
+          className="mt-4 flex flex-col gap-3 sm:flex-row"
+          onSubmit={(e) => {
+            e.preventDefault();
+            updateProfile.mutate(
+              { location: location.trim() },
+              { onSuccess: () => toast.success("Location updated") },
+            );
+          }}
+        >
+          <Input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="e.g. Lagos, Nigeria"
+            className="h-11 rounded-full bg-surface"
+          />
+          <Button type="submit" className="h-11 rounded-full" disabled={updateProfile.isPending}>
+            Save
+          </Button>
+        </form>
+      </section>
 
       <section className="space-y-4">
         <h2 className="font-display text-xl font-bold">Your uploads ({logs?.length ?? 0})</h2>
