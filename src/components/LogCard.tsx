@@ -3,14 +3,17 @@ import { getCategory } from "@/lib/categories";
 import type { MarketLog } from "@/hooks/useMarketplace";
 import { useCurrency } from "@/hooks/useCurrency";
 
-export function LogCard({ log }: { log: MarketLog }) {
+export function LogCard({ log, onClick }: { log: MarketLog; onClick?: () => void }) {
   const category = getCategory(log.category);
   const Icon = category.icon;
   const { format } = useCurrency();
   const seller = log.seller?.display_name?.trim() || log.seller?.email?.split("@")[0] || "Seller";
 
   return (
-    <article className="group overflow-hidden rounded-3xl glass transition-all duration-300 hover:-translate-y-1 hover:shadow-glow">
+    <article
+      onClick={onClick}
+      className={`group overflow-hidden rounded-3xl glass transition-all duration-300 hover:-translate-y-1 hover:shadow-glow ${onClick ? "cursor-pointer" : ""}`}
+    >
       <div className="relative aspect-4/3 overflow-hidden rounded-3xl rounded-b-none bg-surface-2">
         {log.imageUrl ? (
           <img

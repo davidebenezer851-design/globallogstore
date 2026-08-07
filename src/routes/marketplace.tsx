@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/AppShell";
+import { LogDetailSheet } from "@/components/LogDetailSheet";
 import { LogCard } from "@/components/LogCard";
 import { CATEGORIES } from "@/lib/categories";
-import { useLogs } from "@/hooks/useMarketplace";
+import { useLogs, type MarketLog } from "@/hooks/useMarketplace";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/marketplace")({
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/marketplace")({
 
 function Marketplace() {
   const [active, setActive] = useState<string>("all");
+  const [selected, setSelected] = useState<MarketLog | null>(null);
   const { data: logs, isLoading } = useLogs();
   const filtered = (logs ?? []).filter((l) => active === "all" || l.category === active);
 
@@ -75,10 +77,12 @@ function Marketplace() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((log) => (
-            <LogCard key={log.id} log={log} />
+            <LogCard key={log.id} log={log} onClick={() => setSelected(log)} />
           ))}
         </div>
       )}
+
+      <LogDetailSheet log={selected} onClose={() => setSelected(null)} />
     </div>
   );
 }
