@@ -14,7 +14,7 @@ import {
 } from "@/hooks/useMessages";
 import { cn } from "@/lib/utils";
 
-type Search = { peer?: string };
+type Search = { peer?: string | undefined };
 
 export const Route = createFileRoute("/messages")({
   validateSearch: (search: Record<string, unknown>): Search => ({
