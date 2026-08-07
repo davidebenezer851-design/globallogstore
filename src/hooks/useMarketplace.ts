@@ -82,11 +82,27 @@ export function useProfile() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id,email,display_name,avatar_url,wallet_balance")
+        .select("id,email,display_name,avatar_url,wallet_balance,location")
         .eq("id", user!.id)
         .maybeSingle();
       if (error) throw error;
       return data;
+    },
+  });
+}
+
+export function useUpdateProfile() {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (patch: { display_name?: string; location?: string }) => {
+      if (!user) throw new Error("Not signed in");
+      const { error } = await supabase.from("profiles").update(patch).eq("id", user.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ["profile"] });
+      void qc.invalidateQueries({ queryKey: ["peer-profile"] });
     },
   });
 }
